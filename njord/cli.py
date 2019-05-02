@@ -3,14 +3,14 @@
 Usage:
   njord -h|--help
   njord --version
-  njord selserv [--best] [--country=<codename>|-M=<codename>] [--json=<path>]
+  njord selserv [--best] [--country <cn>|--continent <cn>] [--json <path>]
   njord ovpn [--ssl] [--udp] [--port=<port>] [--ovpn-out=<file>] [--ssl-out=<file>] [--log-path=<path>] [--secrets-path=<path>] <ip>
 
 Options:
   --best, -B            If this flag is on the *Reccomended* server is selected
                         instead of a random one.
   --country, -C=<cn>    Select the server from a specific country codename.
-  --continent, -M=<cn>  Select the server from a specific continent codename.
+  --continent, -M=<vn>  Select the server from a specific continent codename.
   --json=<path>         A path to a file containing the status of the AirVPN's
                         servers. (Used for testing and debugging).
 
@@ -23,23 +23,33 @@ Commands:
                         options.
 
 Examples:
-  njord selectserver --country=DE
+  njord selectserver --country DE
 
 """
 from docopt import docopt
 from . import version
+from .selserv import selserv
+from .exceptions import *
+from sys import stderr, exit
 
-def selserv(best, country, continent, json):
-    pass
+def eprint(*args, **kwargs):
+    print(*args, file=stderr, **kwargs)
+    exit(1)
 
+def selectserver(best, country, continent, json):
+    try:
+        country = country.lower() if country else None
+        continent = continent.lower().capitalize() if continent else None
+        print(selserv(best, country, continent, json))
+    except Exception as e:
+        eprint(e)
 
 def main(args=None):
     arguments = docopt(__doc__, version='njord '+str(version))
-    print(arguments)
     if arguments['selserv']:
-        selserv(arguments['--best'], arguments['--country'], arguments['--continent'], arguments['--json'])
+        selectserver(arguments['--best'], arguments['--country'], arguments['--continent'], arguments['--json'])
     elif arguments['ovpn']:
-        pass
+        eprint("Function not implemented yet")
 
 if __name__ == "__main__":
     main()
