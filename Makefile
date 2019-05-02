@@ -10,7 +10,7 @@ clean:
 	rm -rf build/ *.egg-info/
 	find njord -name "__pycache__" -type d -exec rm -rfv \{} +
 
-cleanall: clean uninstall
+cleanall: clean uninstall uninstall-dev
 	rm -rf dist/
 
 install:
