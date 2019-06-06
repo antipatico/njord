@@ -18,12 +18,12 @@ def get_api_data(filein):
         req = request.Request(API_URL)
         resp = request.urlopen(req)
         if resp.getcode() != 200:
-            raise ConnectionException("API server returned bad HTTP status code: {}" % resp.getcode())
+            raise ConnectionException(f"API server returned bad HTTP status code: {resp.getcode()}")
         encoding = resp.headers.get_content_charset() or "utf-8"
         jstr = resp.read().decode(encoding)
         resp.close()
     except Exception as e:
-        raise ConnectionException("Can't connect to the AirVPN API server:\n{}" % str(e))
+        raise ConnectionException(f"Can't connect to the AirVPN API server:\n{str(e)}")
     try:
         return json.loads(jstr)
     except:
