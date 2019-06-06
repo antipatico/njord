@@ -1,5 +1,5 @@
 import json
-import random
+import secrets
 from .exceptions import *
 from urllib import request
 from pprint import pprint
@@ -57,4 +57,4 @@ def selserv(best, country, continent, filein):
     if best:
         return next(server["ip_v4_in2"] for server in data["servers"] if server["public_name"] == best_name)
     else: 
-        return random.choice(pool)["ip_v4_in2"]
+        return secrets.choice(pool)["ip_v4_in2"]
